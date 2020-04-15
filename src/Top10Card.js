@@ -4,7 +4,7 @@ import * as R from 'ramda';
 import {getCountryCode} from './CountyNames';
 export const Top10Card = (props) => {
     return (
-        <Card>
+        <Card centered>
             <Card.Content>
 
                 <Card.Header>{props.label}</Card.Header>
