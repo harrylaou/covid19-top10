@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import * as R from "ramda";
-import { Card } from "semantic-ui-react";
-import "semantic-ui-css/semantic.min.css";
-
+import { map, filter, not, merge, objOf, prop ,
+  includes, sortWith, descend, take } from "ramda";
 import AppHeader from "./AppHeader";
 import Top10Card from "./Top10Card.js";
-import { nonCountries } from "../constants/countries";
-
-const APIURL = "https://coronavirus-19-api.herokuapp.com/countries";
+import { APIURL, nonCountries } from "../constants/";
+import { Card } from "semantic-ui-react";
+import "semantic-ui-css/semantic.min.css";
 
 function App() {
   const [countriesData, setCountriesData] = useState([]);
@@ -19,27 +17,26 @@ function App() {
       const { data } = await axios(APIURL);
       setCountriesData(data);
     };
-
     fetchData();
   }, []);
 
   // Filter data
-  const cleanCountryF = R.filter((c) =>
-    R.not(R.includes(c.country, nonCountries))
+  const cleanCountryF = filter((c) =>
+    not(includes(c.country, nonCountries))
   );
   const cleanCountries = cleanCountryF(countriesData);
   const mkView = (country) => (field) =>
-    R.merge(
-      R.objOf("name", R.prop("country", country)),
-      R.objOf("value", R.prop(field, country))
+    merge(
+      objOf("name", prop("country", country)),
+      objOf("value", prop(field, country))
     );
   const sortedBy = (field) =>
-    R.sortWith([R.descend(R.prop(field))], cleanCountries);
-  const take10By = (field) => R.take(10, sortedBy(field));
+    sortWith([descend(prop(field))], cleanCountries);
+  const take10By = (field) => take(10, sortedBy(field));
 
   // Get data
   const takeBy10View = (field) =>
-    R.map((country) => mkView(country)(field), take10By(field));
+    map((country) => mkView(country)(field), take10By(field));
 
   // Format data to pairs
   const dataPairs = [
@@ -63,9 +60,8 @@ function App() {
   return (
     <div>
       <AppHeader />
-
       <Card.Group centered stackable>
-        {R.map(
+        {map(
           ({ name, count }) => (
             <Top10Card key={name} label={name} countries={count} />
           ),

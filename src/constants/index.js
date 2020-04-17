@@ -1,3 +1,5 @@
+export const APIURL = "https://coronavirus-19-api.herokuapp.com/countries";
+
 export const isoCountries = {
   'AF': 'Afghanistan',
   'AX': 'Aland Islands',
