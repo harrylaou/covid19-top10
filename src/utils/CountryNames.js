@@ -1,11 +1,11 @@
-import * as R from "ramda";
+import { invertObj, prop, toLower, propOr } from "ramda";
 import { isoCountries } from "../constants/countries";
 
-const countriesIso = R.invertObj(isoCountries);
+const countriesIso = invertObj(isoCountries);
 
 
 export const getCountryName = (countryCode) =>
-  R.prop(countryCode, isoCountries);
+  prop(countryCode, isoCountries);
 
 export const getCountryCode = (countryName) =>
-    R.toLower(R.propOr('UN', countryName, countriesIso));
+    toLower(propOr('UN', countryName, countriesIso));
