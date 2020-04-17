@@ -1,6 +1,6 @@
 import React from "react";
-import { Card, Table, Flag } from "semantic-ui-react";
-import * as R from "ramda";
+import { Card, Table, Flag, Loader } from "semantic-ui-react";
+import { map } from "ramda";
 import { getCountryCode } from "../utils/CountryNames";
 
 const Top10Card = ({ label, countries }) => (
@@ -8,9 +8,10 @@ const Top10Card = ({ label, countries }) => (
     <Card.Content>
       <Card.Header>{label}</Card.Header>
       <Card.Description>
-        <Table>
+        {countries.length < 1  &&  <Loader active inline='centered' />}
+        {countries.length > 0 && (<Table>
           <Table.Body>
-            {R.map(
+            {map(
               (country) => (
                 <Table.Row key={country.name}>
                   <Table.Cell>
@@ -23,7 +24,7 @@ const Top10Card = ({ label, countries }) => (
               countries
             )}
           </Table.Body>
-        </Table>
+        </Table>)}
       </Card.Description>
     </Card.Content>
   </Card>
