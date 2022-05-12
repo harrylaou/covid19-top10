@@ -7,4 +7,4 @@ export const getCountryName = (countryCode) =>
   prop(countryCode, isoCountries);
 
 export const getCountryCode = (countryName) =>
-    toLower(propOr('UN', countryName, countriesIso));
+    toLower(propOr('eu', countryName, countriesIso));

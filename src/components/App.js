@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
-import { map, filter, not, merge, objOf, prop ,
-  includes, sortWith, descend, take } from "ramda";
+import {descend, filter, includes, map, not, prop, sortWith, take} from "ramda";
 import AppHeader from "./AppHeader";
 import Top10Card from "./Top10Card.js";
-import { APIURL, nonCountries } from "../constants/";
-import { Card } from "semantic-ui-react";
+import {APIURL, nonCountries} from "../constants/";
+import {Card} from "semantic-ui-react";
 import "semantic-ui-css/semantic.min.css";
 
 function App() {
@@ -15,6 +14,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios(APIURL);
+      console.debug("data", data);
       setCountriesData(data);
     };
     fetchData();
@@ -26,17 +26,24 @@ function App() {
   );
   const cleanCountries = cleanCountryF(countriesData);
   const mkView = (country) => (field) =>
-    merge(
-      objOf("name", prop("country", country)),
-      objOf("value", prop(field, country))
-    );
+  {
+    return {
+      name: prop("country", country),
+      value:  prop(field, country),
+    };
+  };
   const sortedBy = (field) =>
     sortWith([descend(prop(field))], cleanCountries);
   const take10By = (field) => take(10, sortedBy(field));
 
   // Get data
   const takeBy10View = (field) =>
-    map((country) => mkView(country)(field), take10By(field));
+    map((country) => {
+
+      const result =mkView(country)(field)
+      console.debug("takeBy10View", result);
+      return result
+    }, take10By(field));
 
   // Format data to pairs
   const dataPairs = [
@@ -55,6 +62,8 @@ function App() {
     { name: "Deaths per 1M", count: takeBy10View("deathsPerOneMillion") },
     { name: "Tests per 1M", count: takeBy10View("testsPerOneMillion") },
   ];
+
+  console.debug("dataPairs", dataPairs);
 
   // Render data
   return (
