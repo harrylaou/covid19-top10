@@ -14,7 +14,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios(APIURL);
-      console.debug("data", data);
+      // console.debug("data", data);
       setCountriesData(data);
     };
     fetchData();
@@ -41,7 +41,7 @@ function App() {
     map((country) => {
 
       const result =mkView(country)(field)
-      console.debug("takeBy10View", result);
+      // console.debug("takeBy10View", result);
       return result
     }, take10By(field));
 
@@ -63,7 +63,7 @@ function App() {
     { name: "Tests per 1M", count: takeBy10View("testsPerOneMillion") },
   ];
 
-  console.debug("dataPairs", dataPairs);
+  // console.debug("dataPairs", dataPairs);
 
   // Render data
   return (
